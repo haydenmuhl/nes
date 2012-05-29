@@ -1,7 +1,10 @@
 <project name="Nes" default="build" basedir=".">
-    <property name="builddir" value="target" />
-    <property name="srcdir" value="src" />
-    <property name="testdir" value="test" />
+    <property name="builddir"   value="target" />
+    <property name="srcdir"     value="src" />
+    <property name="testdir"    value="test" />
+    <property name="testjar"    value="${testdir}/testng-6.5.2.jar" />
+    
+    <taskdef resource="testngtasks" classpath="${testjar}"/>
     
     <target name="clean">
         <delete dir="${builddir}" />
@@ -21,8 +24,20 @@
                destdir="${builddir}/${testdir}" 
                includeantruntime="false">
             <classpath>
-                <pathelement location="${testdir}/testng-6.5.2.jar" />
+                <pathelement location="${testjar}" />
+                <pathelement path="${builddir}/${srcdir}" />
             </classpath>
         </javac>
+    </target>
+    
+    <target name="test" depends="build-test">
+        <testng outputdir="${builddir}/reports" >
+            <classpath>
+                <pathelement location="${testjar}" />
+                <pathelement path="${builddir}/${testdir}" />
+                <pathelement path="${builddir}/${srcdir}" />
+            </classpath>
+            <classfileset dir="${builddir}/${testdir}" />
+        </testng>
     </target>
 </project>

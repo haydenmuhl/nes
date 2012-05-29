@@ -1,7 +1,7 @@
 package foo;
 
 public class Main {
-    public void run() {
-        System.out.println("It works!");
+    public int doubleInt(int n) {
+        return 2 * n;
     }
 }

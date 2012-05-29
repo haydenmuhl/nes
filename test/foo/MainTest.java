@@ -5,20 +5,14 @@ import static org.testng.Assert.*;
 
 public class MainTest {
     @Test
-    public void passes() {
-        System.out.println("It works!");
-        assertTrue(true);
+    public void testZero() {
+        Main main = new Main();
+        assertEquals(main.doubleInt(0), 0);
     }
     
     @Test
-    public void fails() {
-        System.out.println("This test will fail.");
-        assertTrue(false);
-    }
-    
-    @Test
-    public void alsoFails() {
-        System.out.println("One does not equal two");
-        assertEquals(1, 2);
+    public void testOne() {
+        Main main = new Main();
+        assertEquals(main.doubleInt(1), 2);
     }
 }
