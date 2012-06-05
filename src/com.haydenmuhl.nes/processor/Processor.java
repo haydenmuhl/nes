@@ -1,4 +1,6 @@
-package com.haydenmuhl.nes;
+package com.haydenmuhl.nes.processor;
+
+import com.haydenmuhl.nes.Memory;
 
 public class Processor {
     private short programCounter;
