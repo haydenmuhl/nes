@@ -22,11 +22,4 @@ public class PullRegisterTest {
         r.tick();
         assertEquals(r.output(), new Integer(234));
     }
-    
-    @Test
-    public void asdfasfasfas() {
-        DataSource<Integer> d = new AbstractDataSource<Integer>() {
-            public Integer output() { return new Integer(234); }
-        };
-    }
 }
