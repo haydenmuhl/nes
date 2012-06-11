@@ -1,9 +1,9 @@
 package com.haydenmuhl.nes;
 
 public class PullRegister<T> implements Clocked, DataSource<T> {
-    private T stored;
-    private T toStore;
-    private DataSource<T> dataSource;
+    protected T stored;
+    protected T toStore;
+    protected DataSource<T> dataSource;
 
     public PullRegister(T initialData) {
         toStore = null;
