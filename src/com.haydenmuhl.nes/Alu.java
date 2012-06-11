@@ -7,7 +7,8 @@ public class Alu implements DataSource<Byte> {
     
     public enum Op {
         And, Or, Xor, BitTest, Add, Subtract, Compare,
-        ShiftLeft, ShiftRight, RotateLeft, RotateRight
+        ShiftLeft, ShiftRight, RotateLeft, RotateRight,
+        PassThrough
     }
 
     public void setDataSourceA(DataSource<Byte> dataSourceA) {
@@ -51,6 +52,9 @@ public class Alu implements DataSource<Byte> {
             break;
         case RotateRight:
             result = ((a.output() & 0xff) >> 1) | (a.output() << 7);
+            break;
+        case PassThrough:
+            result = a.output();
             break;
         }
         return (byte)result;

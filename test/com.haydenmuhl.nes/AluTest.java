@@ -90,6 +90,12 @@ public class AluTest {
         alu.setOperation(Alu.Op.RotateRight);
         assertEquals(alu.output(), b(0xe7));
     }
-//        And, Or, Xor, BitTest, Add, Subtract, Compare,
-//        ShiftLeft, ShiftRight, RotateLeft, RotateRight
+    
+    @Test
+    public void testPassThrough() {
+        Alu alu = new Alu();
+        alu.setDataSourceA(ds(0x12));
+        alu.setOperation(Alu.Op.PassThrough);
+        assertEquals(alu.output(), b(0x12));
+    }
 }
