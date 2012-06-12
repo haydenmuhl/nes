@@ -1,42 +1,65 @@
 package com.haydenmuhl.nes;
 
 public class IncrementRegister extends PullRegister<Byte> {
-    protected boolean carry;
+    protected boolean carry; // for overflow
+    protected boolean uncarry; // for underflow
     protected boolean incremented;
+    protected boolean decremented;
     
     public IncrementRegister(Byte initialData) {
         super(initialData);
         carry = false;
-        incremented = false;
+        uncarry = false;
+        clearInputs();
     }
     
     public void increment() {
+        clearInputs();
         incremented = true;
-        toStore = null;
-    };
+    }
+    
+    public void decrement() {
+        clearInputs();
+        decremented = true;
+    }
     
     public boolean overflow() {
         return carry;
     }
     
+    public boolean underflow() {
+        return uncarry;
+    }
+    
     @Override
     public void pull() {
-        incremented = false;
+        clearInputs();
         super.pull();
     }
     
     @Override
     public void tick() {
+        uncarry = false;
         carry = false;
         if (incremented) {
             if (stored == (byte) 0xff) {
                 carry = true;
             }
             stored++;
+        } else if (decremented) {
+            if (stored == (byte) 0x00) {
+                uncarry = true;
+            }
+            stored--;
         } else {
             super.tick();
         }
+        clearInputs();
+    }
+    
+    private void clearInputs() {
         incremented = false;
+        decremented = false;
         toStore = null;
     }
 }
