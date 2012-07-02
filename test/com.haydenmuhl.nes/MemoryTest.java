@@ -4,19 +4,34 @@ import org.testng.annotations.*;
 import static org.testng.Assert.*;
 
 public class MemoryTest {
+    private Byte b(int i) {
+        return new Byte((byte) i);
+    }
+
+    private static class SettableDataSource extends AbstractDataSource<Byte> {
+        private Byte value;
+        
+        public void setValue(int i) {
+            value = (byte)i;
+        }
+        
+        @Override
+        public Byte output() {
+            return value;
+        }
+    }
+
     @Test
-    public void setMemoryLocationTest() {
+    public void readAndWriteMemory() {
+        SettableDataSource data = new SettableDataSource();
         Memory memory = new Memory();
-        memory.setAddress((short)0x0123);
-        memory.setByte((byte)0xab);
-        memory.setAddress((short)0x0432);
-        memory.setByte((byte)0x12);
-        memory.setAddress((short)0x0123);
-        assertEquals(memory.getByte(), (byte)0xab);
-        memory.setByte((byte)0x33);
-        memory.setAddress((short)0x0432);
-        assertEquals(memory.getByte(), (byte)0x12);
-        memory.setAddress((short)0x0123);
-        assertEquals(memory.getByte(), (byte)0x33);
+        memory.setDataSource(data);
+        
+        assertEquals(memory.output(), b(0));
+        data.setValue(10);
+        memory.setAddress((short)0x1234);
+        assertEquals(memory.output(), b(0));
+        memory.write();
+        assertEquals(memory.output(), b(10));
     }
 }
