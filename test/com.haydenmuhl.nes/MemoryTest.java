@@ -34,4 +34,19 @@ public class MemoryTest {
         memory.write();
         assertEquals(memory.output(), b(10));
     }
+    
+    @Test
+    public void testSetAddressWithBytes() {
+        SettableDataSource data = new SettableDataSource();
+        Memory memory = new Memory();
+        memory.setDataSource(data);
+        
+        assertEquals(memory.output(), b(0));
+        data.setValue(10);
+        memory.setAddress((byte)0xfe, (byte)0x34);
+        assertEquals(memory.output(), b(0));
+        memory.write();
+        memory.setAddress((short)0xfe34);
+        assertEquals(memory.output(), b(10));
+    }
 }

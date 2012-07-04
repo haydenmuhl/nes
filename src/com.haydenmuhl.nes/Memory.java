@@ -10,6 +10,13 @@ public class Memory implements DataSource<Byte> {
         return;
     }
     
+    public void setAddress(byte upper, byte lower) {
+        int addr = upper & 0xff;
+        addr = addr << 8;
+        addr = addr | (lower & 0xff);
+        setAddress((short) addr);
+    }
+    
     public Byte output() {
         return memory[address & 0xffff];
     }
