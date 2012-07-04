@@ -14,6 +14,10 @@ public class PullRegister<T> implements Clocked, DataSource<T> {
         dataSource = source;
     }
     
+    public void setValue(T value) {
+        stored = value;
+    }
+    
     public void pull() {
         toStore = dataSource.output();
     }

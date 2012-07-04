@@ -22,4 +22,12 @@ public class PullRegisterTest {
         r.tick();
         assertEquals(r.output(), new Integer(234));
     }
+    
+    @Test
+    public void testSetNewValue() {
+        PullRegister<Integer> r = new PullRegister<Integer>(321);
+        assertEquals(r.output(), new Integer(321));
+        r.setValue(234);
+        assertEquals(r.output(), new Integer(234));
+    }
 }
