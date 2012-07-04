@@ -15,6 +15,7 @@
         <javac srcdir="${srcdir}" 
                destdir="${builddir}/${srcdir}"
                includeantruntime="false">
+            <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
     
