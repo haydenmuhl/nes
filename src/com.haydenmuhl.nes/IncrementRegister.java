@@ -6,6 +6,8 @@ public class IncrementRegister extends PullRegister<Byte> {
     protected boolean incremented;
     protected boolean decremented;
     
+    protected IncrementRegister upper;
+    
     public IncrementRegister(Byte initialData) {
         super(initialData);
         carry = false;
@@ -31,6 +33,10 @@ public class IncrementRegister extends PullRegister<Byte> {
         return uncarry;
     }
     
+    public void setUpper(IncrementRegister reg) {
+        upper = reg;
+    }
+    
     @Override
     public void pull() {
         clearInputs();
@@ -44,11 +50,17 @@ public class IncrementRegister extends PullRegister<Byte> {
         if (incremented) {
             if (stored == (byte) 0xff) {
                 carry = true;
+                if (upper != null) {
+                    upper.increment();
+                }
             }
             stored++;
         } else if (decremented) {
             if (stored == (byte) 0x00) {
                 uncarry = true;
+                if (upper != null) {
+                    upper.decrement();
+                }
             }
             stored--;
         } else {

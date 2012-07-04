@@ -130,4 +130,32 @@ public class IncrementRegisterTest {
         assertEquals(r.output(), b(0xff));
         assertTrue(r.underflow());
     }
+    
+    @Test
+    public void testCascadeUp() {
+        IncrementRegister upper = new IncrementRegister(b(0));
+        IncrementRegister lower = new IncrementRegister(b(0xff));
+        lower.setUpper(upper);
+        
+        lower.increment();
+        lower.tick();
+        upper.tick();
+        
+        assertEquals(lower.output(), b(0x00));
+        assertEquals(upper.output(), b(0x01));
+    }
+    
+    @Test
+    public void testCascadeDown() {
+        IncrementRegister upper = new IncrementRegister(b(123));
+        IncrementRegister lower = new IncrementRegister(b(0));
+        lower.setUpper(upper);
+        
+        lower.decrement();
+        lower.tick();
+        upper.tick();
+        
+        assertEquals(lower.output(), b(0xff));
+        assertEquals(upper.output(), b(122));
+    }
 }
