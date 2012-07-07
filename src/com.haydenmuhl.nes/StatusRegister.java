@@ -1,6 +1,6 @@
 package com.haydenmuhl.nes;
 
-public class StatusRegister implements DataSource<Byte> {
+public class StatusRegister {
     
     private boolean carryFlag;
     private boolean zeroFlag;

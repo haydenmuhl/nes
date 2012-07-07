@@ -1,58 +1,91 @@
 package com.haydenmuhl.nes;
 
-public class Processor implements Clocked {
-    private static String MEMORY = "mem";
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
-    private IncrementRegister regPCH = new IncrementRegister((byte)0xff);
-    private IncrementRegister regPCL = new IncrementRegister((byte)0xfc);
+public class Processor implements Clocked {
+    private byte PCL;
+    private byte PCH;
     
-    private Mux<String, Byte> muxTemp = new Mux<String, Byte>();
-    private PullRegister<Byte> regTemp = new PullRegister<Byte>((byte)0);
+    private byte temp;
+
+    private Memory memory;
     
-    private DataSourceImpl<Byte, Memory> memory = new DataSourceImpl<Byte, Memory>();
+    private SubInstruction currentInstruction;
     
-    private MicroInstruction currentInstruction;
+    private Logger logger;
+    
+    {
+        logger = Logger.getAnonymousLogger();
+        logger.setLevel(Level.OFF);
+    }
     
     public Processor() {
-        muxTemp.add(MEMORY, memory);
-        regTemp.setDataSource(muxTemp);
-        regPCL.setUpper(regPCH);
-
         reset();
     }
     
     public void reset() {
-        regPCH.setValue((byte)0xff);
-        regPCL.setValue((byte)0xfc);
+        PCL = (byte) 0xfc;
+        PCH = (byte) 0xff;
         currentInstruction = JMP0;
     }
 
     public void tick() {
         currentInstruction.go();
         currentInstruction = currentInstruction.next;
-        
-        regTemp.tick();
-        regPCL.tick();
-        regPCH.tick();
     }
     
     public void setMemory(Memory mem) {
-        memory.setDataSource(mem);
+        memory = mem;
     }
     
-    private final MicroInstruction JMP0 = this.new MicroInstruction() {
+    public void setLogger(Logger l) {
+        l.info("proc");
+        
+        logger = l;
+        
+    }
+    
+    private void incPC() {
+        PCL++;
+        if (PCL == 0) {
+            PCH++;
+        }
+    }
+    
+    private final SubInstruction JMP0 = this.new SubInstruction() {
         public void go() {
-            memory.getSource().setAddress(regPCH.output(), regPCL.output());
-            muxTemp.select(MEMORY);
-            regTemp.pull();
-            
-            regPCL.increment();
+            logger.finer(String.format("JMP0 - Read value from address 0x%x%x", PCH, PCL));
+            memory.setAddress(PCH, PCL);
+            temp = memory.output();
+            logger.finer(String.format("JMP0 - Value read from memory: 0x%x", temp));
+            incPC();
+        }
+
+        { next = JMP1; }
+    };
+    
+    private final SubInstruction JMP1 = this.new SubInstruction() {
+        public void go() {
+            logger.finer(String.format("JMP1 - Read value from address 0x%x%x", PCH, PCL));
+            memory.setAddress(PCH, PCL);
+            PCH = memory.output();
+            logger.finer(String.format("JMP1 - Value read from memory: 0x%x", PCH));
+            PCL = temp;
+            logger.finer(String.format("JMP1 - Setting program counter to 0x%x%x", PCH, PCL));
+        }
+        
+        { next = DECODE; }
+    };
+    
+    private final SubInstruction DECODE = this.new SubInstruction() {
+        public void go() {
         }
     };
     
-    private abstract class MicroInstruction {
+    private abstract class SubInstruction {
         public abstract void go();
-        public MicroInstruction next;
+        public SubInstruction next;
     }
 }
 
