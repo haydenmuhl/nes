@@ -57,7 +57,7 @@ public class Processor implements Clocked {
         public void go() {
             logger.finer(String.format("JMP0 - Read value from address 0x%x%x", PCH, PCL));
             memory.setAddress(PCH, PCL);
-            temp = memory.output();
+            temp = memory.getByte();
             logger.finer(String.format("JMP0 - Value read from memory: 0x%x", temp));
             incPC();
         }
@@ -69,7 +69,7 @@ public class Processor implements Clocked {
         public void go() {
             logger.finer(String.format("JMP1 - Read value from address 0x%x%x", PCH, PCL));
             memory.setAddress(PCH, PCL);
-            PCH = memory.output();
+            PCH = memory.getByte();
             logger.finer(String.format("JMP1 - Value read from memory: 0x%x", PCH));
             PCL = temp;
             logger.finer(String.format("JMP1 - Setting program counter to 0x%x%x", PCH, PCL));
