@@ -14,7 +14,9 @@
         <mkdir dir="${builddir}/${srcdir}" />
         <javac srcdir="${srcdir}" 
                destdir="${builddir}/${srcdir}"
-               includeantruntime="false">
+               includeantruntime="false"
+               debug="on"
+               debuglevel="lines,source">
             <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
@@ -23,7 +25,9 @@
         <mkdir dir="${builddir}/${testdir}" />
         <javac srcdir="${testdir}" 
                destdir="${builddir}/${testdir}" 
-               includeantruntime="false">
+               includeantruntime="false"
+               debug="on"
+               debuglevel="lines,vars,source">
             <classpath>
                 <pathelement location="${testjar}" />
                 <pathelement path="${builddir}/${srcdir}" />
