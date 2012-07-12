@@ -1,9 +1,12 @@
-package com.haydenmuhl.nes;
+package com.haydenmuhl.nes.processor;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.Handler;
 import java.util.HashMap;
+
+import com.haydenmuhl.nes.Clocked;
+import com.haydenmuhl.nes.Memory;
 
 public class Processor implements Clocked {
     private byte PCL;

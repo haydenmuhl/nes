@@ -1,10 +1,12 @@
-package com.haydenmuhl.nes;
+package com.haydenmuhl.nes.processor;
 
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 import org.testng.Reporter;
 
 import java.util.logging.*;
+
+import com.haydenmuhl.nes.TestNgReporterHandler;
 
 public class ProcessorTest {
     private Processor proc;

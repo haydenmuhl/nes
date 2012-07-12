@@ -1,4 +1,6 @@
-package com.haydenmuhl.nes;
+package com.haydenmuhl.nes.processor;
+
+import com.haydenmuhl.nes.Memory;
 
 public class MemoryImpl implements Memory {
     public byte[] memory = new byte[0x10000]; // 16-bit addressable memory space
