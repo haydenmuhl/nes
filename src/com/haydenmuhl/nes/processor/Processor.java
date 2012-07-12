@@ -7,12 +7,13 @@ import java.util.HashMap;
 
 import com.haydenmuhl.nes.Clocked;
 import com.haydenmuhl.nes.Memory;
+import com.haydenmuhl.nes.Register;
 
 public class Processor implements Clocked {
-    private byte PCL;
-    private byte PCH;
+    private Register PCL = new Register();
+    private Register PCH = new Register();
     
-    private byte temp;
+    private Register temp = new Register();
 
     private Memory memory;
     
@@ -34,8 +35,8 @@ public class Processor implements Clocked {
     }
     
     public void reset() {
-        PCL = (byte) 0xfc;
-        PCH = (byte) 0xff;
+        PCL.set(0xfc);
+        PCH.set(0xff);
         currentInstruction = subInstr.get("JMP0");
     }
 
@@ -56,9 +57,9 @@ public class Processor implements Clocked {
     }
     
     private void incPC() {
-        PCL++;
-        if (PCL == 0) {
-            PCH++;
+        PCL.set(PCL.get() + 1);
+        if (PCL.get() == 0) {
+            PCH.set(PCH.get() + 1);
         }
     }
     
@@ -70,22 +71,22 @@ public class Processor implements Clocked {
         
         subInstr.put("JMP0", this.new SubInstruction() {
             public void go() {
-                logger.finer(String.format("JMP0 - Read value from address 0x%x%x", PCH, PCL));
-                memory.setAddress(PCH, PCL);
-                temp = memory.getByte();
-                logger.finer(String.format("JMP0 - Value read from memory: 0x%x", temp));
+                logger.finer(String.format("JMP0 - Read value from address 0x%x%x", PCH.get(), PCL.get()));
+                memory.setAddress(PCH.get(), PCL.get());
+                temp.set(memory.getByte());
+                logger.finer(String.format("JMP0 - Value read from memory: 0x%x", temp.get()));
                 incPC();
             }
             { next = "JMP1"; }
         });
         subInstr.put("JMP1", this.new SubInstruction() {
             public void go() {
-                logger.finer(String.format("JMP1 - Read value from address 0x%x%x", PCH, PCL));
-                memory.setAddress(PCH, PCL);
-                PCH = memory.getByte();
-                logger.finer(String.format("JMP1 - Value read from memory: 0x%x", PCH));
-                PCL = temp;
-                logger.finer(String.format("JMP1 - Setting program counter to 0x%x%x", PCH, PCL));
+                logger.finer(String.format("JMP1 - Read value from address 0x%x%x", PCH.get(), PCL.get()));
+                memory.setAddress(PCH.get(), PCL.get());
+                PCH.set(memory.getByte());
+                logger.finer(String.format("JMP1 - Value read from memory: 0x%x", PCH.get()));
+                PCL.set(temp.get());
+                logger.finer(String.format("JMP1 - Setting program counter to 0x%x%x", PCH.get(), PCL.get()));
             }
             
             { next = "DECODE"; }
