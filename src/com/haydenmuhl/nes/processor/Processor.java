@@ -10,19 +10,19 @@ import com.haydenmuhl.nes.Memory;
 import com.haydenmuhl.nes.Register;
 
 public class Processor implements Clocked {
-    private Register PCL = new Register();
-    private Register PCH = new Register();
+    Register PCL = new Register();
+    Register PCH = new Register();
     
-    private Register temp = new Register();
+    Register temp = new Register();
 
-    private Memory memory;
+    Memory memory;
     
     private SubInstruction currentInstruction;
     
     private Logger logger;
-    private HashMap<String, SubInstruction> subInstr = new HashMap<String, SubInstruction>();
     
     public Processor() {
+        logger = Logger.getLogger("com.haydenmuhl.nes.processor.Processor");
         reset();
     }
     
@@ -37,70 +37,27 @@ public class Processor implements Clocked {
     public void reset() {
         PCL.set(0xfc);
         PCH.set(0xff);
-        currentInstruction = subInstr.get("JMP0");
+        Instruction i = new JMP(Mode.absolute);
+        i.setProcessor(this);
+        currentInstruction = i.head();
     }
 
     public void tick() {
         currentInstruction.go();
-        currentInstruction = subInstr.get(currentInstruction.next);
+        currentInstruction = currentInstruction.next();
     }
     
     public void setMemory(Memory mem) {
         memory = mem;
     }
     
-    public void setLogger(Logger l) {
-        l.info("proc");
-        
-        logger = l;
-        
-    }
-    
-    private void incPC() {
+    void incPC() {
         PCL.set(PCL.get() + 1);
         if (PCL.get() == 0) {
             PCH.set(PCH.get() + 1);
         }
     }
     
-    
-    {
-        logger = Logger.getLogger("com.haydenmuhl.nes.Processor");
-        logger.setUseParentHandlers(false);
-        logger.setLevel(Level.OFF);
-        
-        subInstr.put("JMP0", this.new SubInstruction() {
-            public void go() {
-                logger.finer(String.format("JMP0 - Read value from address 0x%x%x", PCH.get(), PCL.get()));
-                memory.setAddress(PCH.get(), PCL.get());
-                temp.set(memory.getByte());
-                logger.finer(String.format("JMP0 - Value read from memory: 0x%x", temp.get()));
-                incPC();
-            }
-            { next = "JMP1"; }
-        });
-        subInstr.put("JMP1", this.new SubInstruction() {
-            public void go() {
-                logger.finer(String.format("JMP1 - Read value from address 0x%x%x", PCH.get(), PCL.get()));
-                memory.setAddress(PCH.get(), PCL.get());
-                PCH.set(memory.getByte());
-                logger.finer(String.format("JMP1 - Value read from memory: 0x%x", PCH.get()));
-                PCL.set(temp.get());
-                logger.finer(String.format("JMP1 - Setting program counter to 0x%x%x", PCH.get(), PCL.get()));
-            }
-            
-            { next = "DECODE"; }
-        });
-        subInstr.put("DECODE", this.new SubInstruction() {
-            public void go() {
-            }
-        });
-    }
-
-    private abstract class SubInstruction {
-        public abstract void go();
-        public String next;
-    }
 }
 
 
