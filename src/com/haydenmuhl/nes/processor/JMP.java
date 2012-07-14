@@ -14,7 +14,7 @@ class JMP extends Instruction {
     private void absolute() {
         SubInstruction sub;
         
-        head = new SubInstruction() {
+        head = this.new SubInstruction() {
             public void go() {
                 p.memory.setAddress(p.PCH.get(), p.PCL.get());
                 p.temp.set(p.memory.getByte());
@@ -22,7 +22,7 @@ class JMP extends Instruction {
             }
         };
         sub = head;
-        sub.next = new SubInstruction() {
+        sub.next = this.new SubInstruction() {
             public void go() {
                 p.memory.setAddress(p.PCH.get(), p.PCL.get());
                 p.PCH.set(p.memory.getByte());
@@ -31,14 +31,5 @@ class JMP extends Instruction {
         };
         sub = sub.next;
         sub.next = null;
-    }
-
-    public void setProcessor(Processor processor) {
-        super.setProcessor(processor);
-        SubInstruction s = head;
-        while (s != null) {
-            s.setProcessor(processor);
-            s = s.next();
-        }
     }
 }

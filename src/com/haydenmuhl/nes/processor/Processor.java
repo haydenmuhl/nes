@@ -17,7 +17,7 @@ public class Processor implements Clocked {
 
     Memory memory;
     
-    private SubInstruction currentInstruction;
+    private Instruction.SubInstruction currentInstruction;
     
     private Logger logger;
     

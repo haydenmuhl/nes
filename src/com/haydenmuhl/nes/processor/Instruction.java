@@ -11,4 +11,14 @@ abstract class Instruction {
     public void setProcessor(Processor processor) {
         p = processor;
     }
+    
+    abstract class SubInstruction {
+        protected SubInstruction next;
+        
+        public abstract void go();
+        
+        public SubInstruction next() {
+            return next;
+        }
+    }
 }
