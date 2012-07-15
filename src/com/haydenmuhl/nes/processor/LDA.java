@@ -15,8 +15,9 @@ class LDA extends Instruction {
                 p.logger.finest("LDA immediate 1");
                 p.memory.setAddress(p.PCH.get(), p.PCL.get());
                 p.regA.set(p.memory.getByte());
-                p.status.setNegativeFlag((p.regA.get() < 0) ? true : false);
-                p.status.setZeroFlag((p.regA.get() == 0) ? true : false);
+                p.status.setNegativeFlag(p.regA.get() < 0);
+                p.status.setZeroFlag(p.regA.get() == 0);
+                p.incPC();
             }
         };
         head.next = null;

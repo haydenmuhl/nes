@@ -48,6 +48,8 @@ public class ProcessorTest {
         assertEquals(proc.PCL.get(), (byte) 0x34);
     }
     
+    // LDA
+    
     @Test
     public void ldaImmediateTest() {
         MemoryImpl mem = mem();
@@ -88,5 +90,87 @@ public class ProcessorTest {
         assertEquals(proc.regA.get(), (byte) 0x00);
         assertEquals(proc.status.getZeroFlag(), true);
         assertEquals(proc.status.getNegativeFlag(), false);
+    }
+    
+    // ADC
+    
+    @Test
+    public void adcImmediateTest() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x02, 0x1235);
+        mem.setByte(0x69, 0x1236); // ADC immediate opcode
+        mem.setByte(0x03, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.regA.get(), (byte) 0x05);
+        assertEquals(proc.status.getCarryFlag(), false, "Carry flag");
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getOverflowFlag(), false, "Overflow flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void adcImmediateTestZeroFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x02, 0x1235);
+        mem.setByte(0x69, 0x1236); // ADC immediate opcode
+        mem.setByte(0xfe, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.regA.get(), (byte) 0x00);
+        assertEquals(proc.status.getCarryFlag(), true, "Carry flag");
+        assertEquals(proc.status.getZeroFlag(), true, "Zero flag");
+        assertEquals(proc.status.getOverflowFlag(), false, "Overflow flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void adcImmediateTestCarryFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0xff, 0x1235);
+        mem.setByte(0x69, 0x1236); // ADC immediate opcode
+        mem.setByte(0x02, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.regA.get(), (byte) 0x01);
+        assertEquals(proc.status.getCarryFlag(), true, "Carry flag");
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getOverflowFlag(), false, "Overflow flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void adcImmediateTestOverflowFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x80, 0x1235);
+        mem.setByte(0x69, 0x1236); // ADC immediate opcode
+        mem.setByte(0x81, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.regA.get(), (byte) 0x01);
+        assertEquals(proc.status.getCarryFlag(), true, "Carry flag");
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getOverflowFlag(), true, "Overflow flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void adcImmediateTestNegativeFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x01, 0x1235);
+        mem.setByte(0x69, 0x1236); // ADC immediate opcode
+        mem.setByte(0xF0, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.regA.get(), (byte) 0xF1);
+        assertEquals(proc.status.getCarryFlag(), false, "Carry flag");
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getOverflowFlag(), false, "Overflow flag");
+        assertEquals(proc.status.getNegativeFlag(), true, "Negative flag");
     }
 }

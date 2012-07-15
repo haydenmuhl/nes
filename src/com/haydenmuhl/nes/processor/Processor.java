@@ -73,12 +73,20 @@ public class Processor implements Clocked {
         Instruction instr = null;
         logger.finer(String.format("Loading opcode from 0x%x%x", PCH.get(), PCL.get()));
         memory.setAddress(PCH.get(), PCL.get());
-        byte opcode = memory.getByte();
-        logger.finer(String.format("Opcode: 0x%x", opcode));
+        byte instructionCode = memory.getByte();
+        logger.finer(String.format("Instruction: 0x%x", instructionCode));
         incPC();
-        if ((opcode & 0x01) == 0x01) {
-            logger.finer("LDA immediate");
-            instr = new LDA(Mode.immediate);
+        if ((instructionCode & 0x01) == 0x01) {
+            logger.finer("Instruction Group 1");
+            Mode mode = Mode.immediate;
+            int op = (instructionCode & 0xff) >>> 5;
+            logger.finer("Opcode: " + op);
+            
+            if (op == 5) {
+                instr = new LDA(mode);
+            } else if (op == 3) {
+                instr = new ADC(mode);
+            }
         }
         instr.setProcessor(this);
         currentInstruction = instr.head();
