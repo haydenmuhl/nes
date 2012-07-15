@@ -1,6 +1,6 @@
 package com.haydenmuhl.nes;
 
-public class StatusRegister {
+public class StatusRegister extends Register {
     
     private boolean carryFlag;
     private boolean zeroFlag;
@@ -9,7 +9,7 @@ public class StatusRegister {
     private boolean overflowFlag;
     private boolean negativeFlag;
 
-    public Boolean getCarryFlag() {
+    public boolean getCarryFlag() {
         return carryFlag;
     }
 
@@ -17,7 +17,7 @@ public class StatusRegister {
         carryFlag = value;
     }
 
-    public Boolean getZeroFlag() {
+    public boolean getZeroFlag() {
         return zeroFlag;
     }
 
@@ -25,7 +25,7 @@ public class StatusRegister {
         zeroFlag = value;
     }
 
-    public Boolean getInterruptFlag() {
+    public boolean getInterruptFlag() {
         return interruptFlag;
     }
 
@@ -33,7 +33,7 @@ public class StatusRegister {
         interruptFlag = value;
     }
 
-    public Boolean getBreakFlag() {
+    public boolean getBreakFlag() {
         return breakFlag;
     }
 
@@ -41,7 +41,7 @@ public class StatusRegister {
         breakFlag = value;
     }
 
-    public Boolean getOverflowFlag() {
+    public boolean getOverflowFlag() {
         return overflowFlag;
     }
 
@@ -49,7 +49,7 @@ public class StatusRegister {
         overflowFlag = value;
     }
 
-    public Boolean getNegativeFlag() {
+    public boolean getNegativeFlag() {
         return negativeFlag;
     }
 
@@ -57,7 +57,8 @@ public class StatusRegister {
         negativeFlag = value;
     }
     
-    public Byte output() {
+    @Override
+    public byte get() {
         int result = 0;
         if(carryFlag) {
             result |= 1;
@@ -81,7 +82,8 @@ public class StatusRegister {
         return (byte)result;
     }
     
-    public void setValue(Byte value) {
+    @Override
+    public void set(byte value) {
         carryFlag     = ((value & 0x01) > 0);
         zeroFlag      = ((value & 0x02) > 0);
         interruptFlag = ((value & 0x04) > 0);

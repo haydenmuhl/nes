@@ -8,10 +8,12 @@ import java.util.HashMap;
 import com.haydenmuhl.nes.Clocked;
 import com.haydenmuhl.nes.Memory;
 import com.haydenmuhl.nes.Register;
+import com.haydenmuhl.nes.StatusRegister;
 
 public class Processor implements Clocked {
     Register PCL = new Register();
     Register PCH = new Register();
+    StatusRegister status = new StatusRegister();
     
     Register regA = new Register();
     

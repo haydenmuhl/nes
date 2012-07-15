@@ -18,6 +18,12 @@ public class ProcessorTest {
         return mem;
     }
     
+    private static void nTicks(Processor p, int n) {
+        for (int i = 0; i < n; i++) {
+            p.tick();
+        }
+    }
+    
     @BeforeTest
     public void beforeTest() {
         proc = new Processor();
@@ -53,5 +59,7 @@ public class ProcessorTest {
         proc.tick();
         proc.tick();
         assertEquals(proc.regA.get(), (byte) 0x42);
+        assertEquals(proc.status.getZeroFlag(), false);
+        assertEquals(proc.status.getNegativeFlag(), false);
     }
 }
