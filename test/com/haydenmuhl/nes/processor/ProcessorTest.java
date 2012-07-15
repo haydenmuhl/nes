@@ -62,4 +62,31 @@ public class ProcessorTest {
         assertEquals(proc.status.getZeroFlag(), false);
         assertEquals(proc.status.getNegativeFlag(), false);
     }
+    
+    @Test
+    public void ldaImmediateTestNegFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0xC4, 0x1235); // negative value
+        proc.setMemory(mem);
+        proc.tick();
+        proc.tick();
+        proc.tick();
+        proc.tick();
+        assertEquals(proc.regA.get(), (byte) 0xC4);
+        assertEquals(proc.status.getZeroFlag(), false);
+        assertEquals(proc.status.getNegativeFlag(), true);
+    }
+    
+    @Test
+    public void ldaImmedateTestZeroFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x00, 0x1235);
+        proc.setMemory(mem);
+        nTicks(proc, 4);
+        assertEquals(proc.regA.get(), (byte) 0x00);
+        assertEquals(proc.status.getZeroFlag(), true);
+        assertEquals(proc.status.getNegativeFlag(), false);
+    }
 }
