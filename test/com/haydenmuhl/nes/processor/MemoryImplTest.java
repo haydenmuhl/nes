@@ -22,4 +22,12 @@ public class MemoryImplTest {
         mem.memory[0x1234] = (byte) 0x99;
         assertEquals(mem.getByte(), (byte) 0x99);
     }
+    
+    @Test
+    public void setByteAtAddress() {
+        MemoryImpl mem = new MemoryImpl();
+        mem.memory[0x2345] = 111;
+        mem.setByte(123, 0x2345);
+        assertEquals(mem.memory[0x2345], 123);
+    }
 }

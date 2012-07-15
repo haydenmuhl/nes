@@ -1,5 +1,6 @@
 package com.haydenmuhl.nes.processor;
 
 enum Mode {
-    absolute
+    immediate,
+    absolute,
 }

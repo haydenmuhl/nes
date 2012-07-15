@@ -13,13 +13,15 @@ public class Processor implements Clocked {
     Register PCL = new Register();
     Register PCH = new Register();
     
+    Register regA = new Register();
+    
     Register temp = new Register();
 
     Memory memory;
     
     private Instruction.SubInstruction currentInstruction;
     
-    private Logger logger;
+    Logger logger;
     
     public Processor() {
         logger = Logger.getLogger("com.haydenmuhl.nes.processor.Processor");
@@ -43,8 +45,15 @@ public class Processor implements Clocked {
     }
 
     public void tick() {
-        currentInstruction.go();
-        currentInstruction = currentInstruction.next();
+        
+        if (currentInstruction == null) {
+            logger.finer("Decode");
+            decode();
+        } else {
+            logger.finer("Go");
+            currentInstruction.go();
+            currentInstruction = currentInstruction.next();
+        }
     }
     
     public void setMemory(Memory mem) {
@@ -58,6 +67,20 @@ public class Processor implements Clocked {
         }
     }
     
+    private void decode() {
+        Instruction instr = null;
+        logger.finer(String.format("Loading opcode from 0x%x%x", PCH.get(), PCL.get()));
+        memory.setAddress(PCH.get(), PCL.get());
+        byte opcode = memory.getByte();
+        logger.finer(String.format("Opcode: 0x%x", opcode));
+        incPC();
+        if ((opcode & 0x01) == 0x01) {
+            logger.finer("LDA immediate");
+            instr = new LDA(Mode.immediate);
+        }
+        instr.setProcessor(this);
+        currentInstruction = instr.head();
+    }
 }
 
 

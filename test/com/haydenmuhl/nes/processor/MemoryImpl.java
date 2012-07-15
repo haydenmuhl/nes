@@ -27,4 +27,8 @@ public class MemoryImpl implements Memory {
         memory[address & 0xffff] = b;
         return;
     }
+    
+    public void setByte(int b, int addr) {
+        memory[addr & 0xffff] = (byte) b;
+    }
 }

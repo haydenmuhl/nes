@@ -38,5 +38,20 @@ public class ProcessorTest {
         proc.setMemory(mem());
         proc.tick();
         proc.tick();
+        assertEquals(proc.PCH.get(), (byte) 0x12);
+        assertEquals(proc.PCL.get(), (byte) 0x34);
+    }
+    
+    @Test
+    public void ldaImmediateTest() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x42, 0x1235); // value
+        proc.setMemory(mem);
+        proc.tick();
+        proc.tick();
+        proc.tick();
+        proc.tick();
+        assertEquals(proc.regA.get(), (byte) 0x42);
     }
 }
