@@ -16,11 +16,11 @@ abstract class Instruction {
     }
     
     protected void immediate() {
-        throw new RuntimeException();
+        throw new UnsupportedInstructionException();
     }
     
     protected void absolute() {
-        throw new RuntimeException();
+        throw new UnsupportedInstructionException();
     }
     
     public SubInstruction head() {

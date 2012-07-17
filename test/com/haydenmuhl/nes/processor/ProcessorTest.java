@@ -305,4 +305,15 @@ public class ProcessorTest {
         assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
         assertEquals(proc.status.getNegativeFlag(), true, "Negative flag");
     }
+    
+    // STA
+    
+    @Test(expectedExceptions = UnsupportedInstructionException.class)
+    public void staImmediateNotSupportedTest() {
+        MemoryImpl mem = mem();
+        mem.setByte(0x89, 0x1234); // STA immediate, not supported
+        mem.setByte(0x01, 0x1235);
+        proc.setMemory(mem);
+        nTicks(proc, 4);
+    }
 }
