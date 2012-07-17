@@ -94,6 +94,8 @@ public class Processor implements Clocked {
                 instr = new EOR(mode);
             } else if (op == 1) {
                 instr = new AND(mode);
+            } else if (op == 0) {
+                instr = new ORA(mode);
             }
         }
         instr.setProcessor(this);
