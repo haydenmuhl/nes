@@ -261,4 +261,48 @@ public class ProcessorTest {
         assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
         assertEquals(proc.status.getNegativeFlag(), true, "Negative flag");
     }
+    
+    // CMP
+    
+    @Test
+    public void cmpImmediateTestMemEqAcc() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x12, 0x1235);
+        mem.setByte(0xC9, 0x1236); // CMP immediate opcode
+        mem.setByte(0x12, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.status.getCarryFlag(), true, "Carry flag");
+        assertEquals(proc.status.getZeroFlag(), true, "Zero flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void cmpImmediateTestMemLtAcc() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x12, 0x1235);
+        mem.setByte(0xC9, 0x1236); // CMP immediate opcode
+        mem.setByte(0x11, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.status.getCarryFlag(), false, "Carry flag");
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void cmpImmediateTestMemGtAcc() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x12, 0x1235);
+        mem.setByte(0xC9, 0x1236); // CMP immediate opcode
+        mem.setByte(0x13, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.status.getCarryFlag(), true, "Carry flag");
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getNegativeFlag(), true, "Negative flag");
+    }
 }

@@ -82,7 +82,9 @@ public class Processor implements Clocked {
             int op = (instructionCode & 0xff) >>> 5;
             logger.finer("Opcode: " + op);
             
-            if (op == 5) {
+            if (op == 6) {
+                instr = new CMP(mode);
+            } else if (op == 5) {
                 instr = new LDA(mode);
             } else if (op == 3) {
                 instr = new ADC(mode);
