@@ -53,6 +53,8 @@ public class OraTest {
         assertEquals(proc.regA.get(), (byte) 0x3f);
         assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
         assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+        assertEquals(proc.PCH.get(), 0x12, "PCH");
+        assertEquals(proc.PCL.get(), 0x38, "PCL");
     }
     
     @Test

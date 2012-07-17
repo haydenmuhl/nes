@@ -16,6 +16,7 @@ class EOR extends Instruction {
                 p.regA.set(a ^ m);
                 p.status.setZeroFlag(p.regA.get() == 0);
                 p.status.setNegativeFlag(p.regA.get() < 0);
+                p.incPC();
             }
         };
         head.next = null;

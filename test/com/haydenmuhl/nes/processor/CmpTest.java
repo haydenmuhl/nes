@@ -53,6 +53,8 @@ public class CmpTest {
         assertEquals(proc.status.getCarryFlag(), true, "Carry flag");
         assertEquals(proc.status.getZeroFlag(), true, "Zero flag");
         assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+        assertEquals(proc.PCH.get(), 0x12, "PCH value");
+        assertEquals(proc.PCL.get(), 0x38, "PCL value");
     }
     
     @Test

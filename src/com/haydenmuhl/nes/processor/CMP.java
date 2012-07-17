@@ -16,6 +16,7 @@ class CMP extends Instruction {
                 p.status.setZeroFlag(a == m);
                 p.status.setCarryFlag(m >= a);
                 p.status.setNegativeFlag((a - m) < 0);
+                p.incPC();
             }
         };
         head.next = null;

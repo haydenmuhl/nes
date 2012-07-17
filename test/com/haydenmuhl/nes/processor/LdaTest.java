@@ -54,6 +54,8 @@ public class LdaTest {
         assertEquals(proc.regA.get(), (byte) 0x42);
         assertEquals(proc.status.getZeroFlag(), false);
         assertEquals(proc.status.getNegativeFlag(), false);
+        assertEquals(proc.PCH.get(), 0x12, "PCH");
+        assertEquals(proc.PCL.get(), 0x36, "PCL");
     }
     
     @Test
