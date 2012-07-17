@@ -86,6 +86,8 @@ public class Processor implements Clocked {
                 instr = new LDA(mode);
             } else if (op == 3) {
                 instr = new ADC(mode);
+            } else if (op == 2) {
+                instr = new EOR(mode);
             } else if (op == 1) {
                 instr = new AND(mode);
             }

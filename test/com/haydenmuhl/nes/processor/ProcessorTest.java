@@ -217,4 +217,48 @@ public class ProcessorTest {
         assertEquals(proc.status.getZeroFlag(), true, "Zero flag");
         assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
     }
+    
+    // EOR
+    
+    @Test
+    public void eorImmediateTest() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x0f, 0x1235);
+        mem.setByte(0x49, 0x1236); // EOR immediate opcode
+        mem.setByte(0x33, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.regA.get(), (byte) 0x3C);
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void eorImmediateTestZeroFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0x55, 0x1235);
+        mem.setByte(0x49, 0x1236); // EOR immediate opcode
+        mem.setByte(0x55, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.regA.get(), (byte) 0x00);
+        assertEquals(proc.status.getZeroFlag(), true, "Zero flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void eorImmediateTestNegativeFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA9, 0x1234); // LDA immediate opcode
+        mem.setByte(0xf0, 0x1235);
+        mem.setByte(0x49, 0x1236); // EOR immediate opcode
+        mem.setByte(0x5A, 0x1237);
+        proc.setMemory(mem);
+        nTicks(proc, 6);
+        assertEquals(proc.regA.get(), (byte) 0xAA);
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getNegativeFlag(), true, "Negative flag");
+    }
 }
