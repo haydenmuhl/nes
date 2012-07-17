@@ -4,14 +4,11 @@ import java.util.HashMap;
 
 class JMP extends Instruction {
     public JMP(Mode mode) {
-        switch (mode) {
-        case absolute:
-            absolute();
-            break;
-        }
+        super(mode);
     }
     
-    private void absolute() {
+    @Override
+    protected void absolute() {
         SubInstruction sub;
         
         head = this.new SubInstruction() {

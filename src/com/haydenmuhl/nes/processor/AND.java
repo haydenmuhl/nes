@@ -2,14 +2,11 @@ package com.haydenmuhl.nes.processor;
 
 class AND extends Instruction {
     public AND(Mode mode) {
-        switch (mode) {
-        case immediate:
-            immediate();
-            break;
-        }
+        super(mode);
     }
 
-    private void immediate() {
+    @Override
+    protected void immediate() {
         head = this.new SubInstruction() {
             public void go() {
                 p.logger.finest("AND immediate 1");

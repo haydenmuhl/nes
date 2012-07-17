@@ -2,14 +2,11 @@ package com.haydenmuhl.nes.processor;
 
 class LDA extends Instruction {
     public LDA(Mode mode) {
-        switch (mode) {
-        case immediate:
-            immediate();
-            break;
-        }
+        super(mode);
     }
     
-    private void immediate() {
+    @Override
+    protected void immediate() {
         head = this.new SubInstruction() {
             public void go() {
                 p.logger.finest("LDA immediate 1");

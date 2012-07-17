@@ -2,14 +2,11 @@ package com.haydenmuhl.nes.processor;
 
 class ADC extends Instruction {
     public ADC(Mode mode) {
-        switch (mode) {
-        case immediate:
-            immediate();
-            break;
-        }
+        super(mode);
     }
     
-    private void immediate() {
+    @Override
+    protected void immediate() {
         head = this.new SubInstruction() {
             public void go() {
                 p.logger.finest("ADC immediate 1");
