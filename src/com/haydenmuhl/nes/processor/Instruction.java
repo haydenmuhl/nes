@@ -9,6 +9,9 @@ abstract class Instruction {
         case immediate:
             immediate();
             break;
+        case zeroPage:
+            zeroPage();
+            break;
         case absolute:
             absolute();
             break;
@@ -16,6 +19,10 @@ abstract class Instruction {
     }
     
     protected void immediate() {
+        throw new UnsupportedInstructionException();
+    }
+    
+    protected void zeroPage() {
         throw new UnsupportedInstructionException();
     }
     

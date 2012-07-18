@@ -39,7 +39,7 @@ public class LdaTest {
         proc.reset();
     }
 
-    // LDA
+    // Immediate
     
     @Test
     public void ldaImmediateTest() {
@@ -83,5 +83,46 @@ public class LdaTest {
         assertEquals(proc.regA.get(), (byte) 0x00);
         assertEquals(proc.status.getZeroFlag(), true);
         assertEquals(proc.status.getNegativeFlag(), false);
+    }
+    
+    // Zero Page
+    
+    @Test
+    public void ldaZeroPageTest() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA5, 0x1234); // LDA zero page
+        mem.setByte(0x99, 0x1235); // zero page address
+        mem.setByte(0x42, 0x0099); // value to load
+        proc.setMemory(mem);
+        nTicks(proc, 5);
+        assertEquals(proc.regA.get(), (byte) 0x42);
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void ldaZeroPageTestZeroFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA5, 0x1234); // LDA zero page
+        mem.setByte(0x99, 0x1235); // zero page address
+        mem.setByte(0x00, 0x0099); // value to load
+        proc.setMemory(mem);
+        nTicks(proc, 5);
+        assertEquals(proc.regA.get(), (byte) 0x00);
+        assertEquals(proc.status.getZeroFlag(), true, "Zero flag");
+        assertEquals(proc.status.getNegativeFlag(), false, "Negative flag");
+    }
+    
+    @Test
+    public void ldaZeroPageTestNegativeFlag() {
+        MemoryImpl mem = mem();
+        mem.setByte(0xA5, 0x1234); // LDA zero page
+        mem.setByte(0x99, 0x1235); // zero page address
+        mem.setByte(0xf0, 0x0099); // value to load
+        proc.setMemory(mem);
+        nTicks(proc, 5);
+        assertEquals(proc.regA.get(), (byte) 0xf0);
+        assertEquals(proc.status.getZeroFlag(), false, "Zero flag");
+        assertEquals(proc.status.getNegativeFlag(), true, "Negative flag");
     }
 }

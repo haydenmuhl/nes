@@ -78,7 +78,15 @@ public class Processor implements Clocked {
         incPC();
         if ((instructionCode & 0x01) == 0x01) {
             logger.finer("Instruction Group 1");
-            Mode mode = Mode.immediate;
+            
+            Mode mode = null;
+            int addrMode = (instructionCode & 0x1C) >> 2;
+            if (addrMode == 2) {
+                mode = Mode.immediate;
+            } else if (addrMode == 1) {
+                mode = Mode.zeroPage;
+            }
+            
             int op = (instructionCode & 0xff) >>> 5;
             logger.finer("Opcode: " + op);
             
