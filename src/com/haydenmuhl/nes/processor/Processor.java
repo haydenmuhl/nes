@@ -41,6 +41,7 @@ public class Processor implements Clocked {
     public void reset() {
         PCL.set(0xfc);
         PCH.set(0xff);
+        status.set(0);
         Instruction i = new JMP(Mode.absolute);
         i.setProcessor(this);
         currentInstruction = i.head();

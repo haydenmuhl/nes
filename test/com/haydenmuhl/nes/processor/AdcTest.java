@@ -122,4 +122,16 @@ public class AdcTest {
         assertEquals(proc.status.getOverflowFlag(), false, "Overflow flag");
         assertEquals(proc.status.getNegativeFlag(), true, "Negative flag");
     }
+    
+    @Test
+    public void adcImmediateTestCarry() {
+        MemoryImpl mem = mem();
+        mem.setByte(0x69, 0x1234); // ADC immediate
+        mem.setByte(0x10, 0x1235);
+        proc.setMemory(mem);
+        proc.regA.set(0x10);
+        proc.status.setCarryFlag(true);
+        nTicks(proc, 4);
+        assertEquals(proc.regA.get(), (byte) 0x21);
+    }
 }

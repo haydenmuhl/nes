@@ -13,7 +13,7 @@ class ADC extends Instruction {
                 p.memory.setAddress(p.PCH.get(), p.PCL.get());
                 byte a = p.regA.get();
                 byte m = p.memory.getByte();
-                p.regA.set(m + a);
+                p.regA.set(m + a + (p.status.getCarryFlag() ? 1 : 0));
                 p.status.setZeroFlag(p.regA.get() == 0);
                 p.status.setCarryFlag((0xff - (a & 0xff)) < (m & 0xff));
                 p.status.setOverflowFlag(((a & 0x80) == (m & 0x80)) && 
